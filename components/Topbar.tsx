@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { Plus, Search } from "lucide-react";
+import { UserMenu } from "./UserMenu";
 
 export function Topbar({ title, subtitle, action }: { title: string; subtitle?: string; action?: React.ReactNode }) {
   return (
@@ -25,6 +26,7 @@ export function Topbar({ title, subtitle, action }: { title: string; subtitle?: 
           New workflow
         </Link>
       )}
+      <UserMenu />
     </header>
   );
 }

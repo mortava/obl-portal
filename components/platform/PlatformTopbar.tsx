@@ -1,6 +1,7 @@
 "use client";
 
 import { Search, AlertTriangle } from "lucide-react";
+import { UserMenu } from "../UserMenu";
 
 interface PlatformTopbarProps {
   title: string;
@@ -32,6 +33,7 @@ export function PlatformTopbar({ title, subtitle, action, alertCount = 0 }: Plat
         </div>
       )}
       {action}
+      <UserMenu />
     </header>
   );
 }
