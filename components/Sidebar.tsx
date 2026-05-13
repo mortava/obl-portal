@@ -11,6 +11,7 @@ import {
   Sparkles,
   ShieldCheck,
   Building2,
+  BookOpen,
 } from "lucide-react";
 import { cls } from "@/lib/utils";
 
@@ -19,6 +20,7 @@ const NAV = [
   { href: "/runs", label: "Runs", icon: Activity },
   { href: "/connections", label: "Connections", icon: Plug },
   { href: "/templates", label: "Templates", icon: LayoutGrid },
+  { href: "/help", label: "Guides", icon: BookOpen },
   { href: "/settings", label: "Settings", icon: Settings },
 ];
 

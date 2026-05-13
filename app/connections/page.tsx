@@ -134,8 +134,12 @@ export default function ConnectionsPage() {
             back to their assignees.
           </p>
           <p className="text-xs text-ink-500 leading-relaxed mt-2">
-            For instructions on provisioning the Encompass API user and configuring environment
-            variables, see <code className="font-mono">docs/ENCOMPASS_SETUP.md</code>.
+            For step-by-step setup, read{" "}
+            <a href="/help/connectors" className="text-brand-700 hover:underline">
+              How to add connectors
+            </a>
+            . For Encompass-specific provisioning, see{" "}
+            <code className="font-mono">docs/ENCOMPASS_SETUP.md</code>.
           </p>
         </div>
       </div>
