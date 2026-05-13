@@ -131,7 +131,11 @@ export default function WorkflowDetailPage() {
                 const s = RUN_STATUS[run.status];
                 const Icon = s.icon;
                 return (
-                  <div key={run.id} className="grid grid-cols-12 px-4 py-3 items-center">
+                  <Link
+                    key={run.id}
+                    href={`/runs/${run.id}`}
+                    className="grid grid-cols-12 px-4 py-3 items-center hover:bg-ink-50 transition-colors"
+                  >
                     <div className="col-span-4 font-mono text-xs text-ink-700">{run.id}</div>
                     <div className="col-span-2 font-mono text-xs text-ink-600">{run.loanRef ?? "—"}</div>
                     <div className="col-span-2">
@@ -142,7 +146,7 @@ export default function WorkflowDetailPage() {
                     </div>
                     <div className="col-span-2 text-xs text-ink-600">{fmtDuration(run.durationMs)}</div>
                     <div className="col-span-2 text-right text-xs text-ink-500">{timeAgo(run.startedAt)}</div>
-                  </div>
+                  </Link>
                 );
               })}
             </div>

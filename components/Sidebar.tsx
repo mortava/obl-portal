@@ -2,7 +2,16 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Workflow, Activity, Plug, LayoutGrid, Settings, Sparkles, ShieldCheck } from "lucide-react";
+import {
+  Workflow,
+  Activity,
+  Plug,
+  LayoutGrid,
+  Settings,
+  Sparkles,
+  ShieldCheck,
+  Building2,
+} from "lucide-react";
 import { cls } from "@/lib/utils";
 
 const NAV = [
@@ -47,6 +56,13 @@ export function Sidebar() {
         })}
       </nav>
       <div className="mt-auto p-3 space-y-2">
+        <Link
+          href="/platform"
+          className="flex items-center gap-2 rounded-lg border border-ink-200 bg-ink-900 text-white px-3 py-2 text-sm font-medium hover:bg-ink-800 transition-colors"
+        >
+          <Building2 className="w-4 h-4" />
+          Platform console
+        </Link>
         <div className="rounded-xl border border-emerald-200 bg-emerald-50 p-3 text-xs text-emerald-900">
           <div className="flex items-center gap-1.5 font-medium mb-1">
             <ShieldCheck className="w-3.5 h-3.5" />

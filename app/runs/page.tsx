@@ -40,7 +40,7 @@ export default function RunsPage() {
               return (
                 <Link
                   key={run.id}
-                  href={`/workflows/${run.workflowId}`}
+                  href={`/runs/${run.id}`}
                   className="grid grid-cols-12 px-5 py-3.5 items-center hover:bg-ink-50 transition-colors group"
                 >
                   <div className="col-span-4 min-w-0">
