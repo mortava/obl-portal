@@ -1,12 +1,11 @@
-"use client";
-
 import Link from "next/link";
 import { ShieldCheck, CheckCircle2, AlertTriangle, BookOpen } from "lucide-react";
 import { PlatformShell } from "@/components/platform/PlatformShell";
-import { SAMPLE_POLICIES } from "@/lib/platform-samples";
+import { listPolicies } from "@/lib/data/policies";
 import { cls } from "@/lib/utils";
 
-export default function PlatformPoliciesPage() {
+export default async function PlatformPoliciesPage() {
+  const policies = await listPolicies();
   return (
     <PlatformShell
       title="Policies"
@@ -30,7 +29,7 @@ export default function PlatformPoliciesPage() {
         </div>
 
         <div className="space-y-4">
-          {SAMPLE_POLICIES.map((p) => (
+          {policies.map((p) => (
             <div key={p.id} className="card p-5">
               <div className="flex flex-wrap items-start justify-between gap-3">
                 <div className="flex items-start gap-3">

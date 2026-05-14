@@ -1,5 +1,3 @@
-"use client";
-
 import Link from "next/link";
 import {
   Building2,
@@ -11,24 +9,26 @@ import {
   TrendingUp,
 } from "lucide-react";
 import { PlatformShell } from "@/components/platform/PlatformShell";
-import {
-  SAMPLE_TENANTS,
-  SAMPLE_PLATFORM_USERS,
-  SAMPLE_PLATFORM_WORKFLOWS,
-  SAMPLE_ALERTS,
-  SAMPLE_POLICIES,
-  SAMPLE_AUDIT,
-} from "@/lib/platform-samples";
+import { listTenants } from "@/lib/data/tenants";
+import { listPlatformUsers } from "@/lib/data/profiles";
+import { listPlatformWorkflows } from "@/lib/data/workflows";
+import { listAlerts } from "@/lib/data/alerts";
+import { listPolicies } from "@/lib/data/policies";
+import { listAuditEntries } from "@/lib/data/audit";
 import { cls } from "@/lib/utils";
 import { fmtNum, fmtPct, timeAgo } from "@/lib/utils";
 
-export default function PlatformOverviewPage() {
-  const tenants = SAMPLE_TENANTS;
-  const users = SAMPLE_PLATFORM_USERS;
-  const workflows = SAMPLE_PLATFORM_WORKFLOWS;
-  const openAlerts = SAMPLE_ALERTS.filter((a) => !a.acknowledged);
-  const policies = SAMPLE_POLICIES;
-  const audit = SAMPLE_AUDIT.slice(0, 6);
+export default async function PlatformOverviewPage() {
+  const [tenants, users, workflows, allAlerts, policies, auditAll] = await Promise.all([
+    listTenants(),
+    listPlatformUsers(),
+    listPlatformWorkflows(),
+    listAlerts(),
+    listPolicies(),
+    listAuditEntries(20),
+  ]);
+  const openAlerts = allAlerts.filter((a) => !a.acknowledged);
+  const audit = auditAll.slice(0, 6);
 
   const activeTenants = tenants.filter((t) => t.status === "active").length;
   const trialTenants = tenants.filter((t) => t.status === "trial").length;

@@ -1,6 +1,4 @@
-"use client";
-
-import { notFound, useParams } from "next/navigation";
+import { notFound } from "next/navigation";
 import Link from "next/link";
 import {
   Building2,
@@ -15,24 +13,32 @@ import {
   Mail,
 } from "lucide-react";
 import { PlatformShell } from "@/components/platform/PlatformShell";
-import {
-  SAMPLE_TENANTS,
-  SAMPLE_PLATFORM_USERS,
-  SAMPLE_PLATFORM_WORKFLOWS,
-  SAMPLE_CONNECTION_HEALTH,
-  SAMPLE_AUDIT,
-} from "@/lib/platform-samples";
+import { getTenant } from "@/lib/data/tenants";
+import { listPlatformUsers } from "@/lib/data/profiles";
+import { listPlatformWorkflows } from "@/lib/data/workflows";
+import { listConnectionHealth } from "@/lib/data/connections";
+import { listAuditEntries } from "@/lib/data/audit";
 import { cls, fmtNum, fmtPct, timeAgo } from "@/lib/utils";
 
-export default function TenantDetailPage() {
-  const params = useParams<{ id: string }>();
-  const tenant = SAMPLE_TENANTS.find((t) => t.id === params.id);
+export default async function TenantDetailPage({
+  params,
+}: {
+  params: Promise<{ id: string }>;
+}) {
+  const { id } = await params;
+  const tenant = await getTenant(id);
   if (!tenant) return notFound();
 
-  const users = SAMPLE_PLATFORM_USERS.filter((u) => u.tenantId === tenant.id);
-  const workflows = SAMPLE_PLATFORM_WORKFLOWS.filter((w) => w.tenantId === tenant.id);
-  const connections = SAMPLE_CONNECTION_HEALTH.filter((c) => c.tenantId === tenant.id);
-  const audit = SAMPLE_AUDIT.filter((a) => a.tenantId === tenant.id);
+  const [allUsers, allWorkflows, allConn, allAudit] = await Promise.all([
+    listPlatformUsers(),
+    listPlatformWorkflows(),
+    listConnectionHealth(),
+    listAuditEntries(100),
+  ]);
+  const users = allUsers.filter((u) => u.tenantId === tenant.id);
+  const workflows = allWorkflows.filter((w) => w.tenantId === tenant.id);
+  const connections = allConn.filter((c) => c.tenantId === tenant.id);
+  const audit = allAudit.filter((a) => a.tenantId === tenant.id);
 
   const budgetPct = Math.round((tenant.monthlyRunsUsed / tenant.monthlyRunBudget) * 100);
 
