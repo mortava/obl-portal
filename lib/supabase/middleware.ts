@@ -8,6 +8,7 @@ const PUBLIC_PATHS = [
   "/auth/signout",
   "/auth/confirm",
   "/api/healthz",
+  "/403",
 ];
 
 function isPublic(pathname: string): boolean {
@@ -65,6 +66,22 @@ export async function updateSession(request: NextRequest): Promise<NextResponse>
     home.pathname = "/";
     home.search = "";
     return NextResponse.redirect(home);
+  }
+
+  // RBAC gate for the operator console.
+  if (user && pathname.startsWith("/platform")) {
+    const { data: profile } = await supabase
+      .from("obl_profiles")
+      .select("platform_role")
+      .eq("id", user.id)
+      .maybeSingle();
+    const role = profile?.platform_role;
+    if (role !== "admin" && role !== "support") {
+      const forbidden = request.nextUrl.clone();
+      forbidden.pathname = "/403";
+      forbidden.search = "";
+      return NextResponse.redirect(forbidden);
+    }
   }
 
   return response;
