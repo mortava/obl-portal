@@ -1,9 +1,12 @@
-"use client";
-
-import { ShieldCheck, KeyRound, Globe, GitBranch, Database } from "lucide-react";
+import { Mail, ShieldCheck, KeyRound, Globe, GitBranch, Database } from "lucide-react";
 import { PlatformShell } from "@/components/platform/PlatformShell";
+import { SendTestEmailButton } from "@/components/platform/SendTestEmailButton";
+import { emailConfigured } from "@/lib/server/email";
 
 export default function PlatformSettingsPage() {
+  const azureReady = emailConfigured();
+  const mailFrom = process.env.AZURE_MAIL_FROM ?? null;
+
   return (
     <PlatformShell title="Platform settings" subtitle="Operator-only configuration">
       <div className="max-w-3xl mx-auto p-8 space-y-6">
@@ -33,6 +36,30 @@ export default function PlatformSettingsPage() {
         </Section>
 
         <Section
+          icon={<Mail className="w-4 h-4" />}
+          title="Outbound email (Microsoft Graph)"
+          desc="Used for user invitations, alert notifications, and notify.email workflow steps. Authenticated via Azure AD client credentials."
+        >
+          <div className="space-y-3">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
+              <KV label="Status" value={azureReady ? "configured" : "missing env vars"} tone={azureReady ? "green" : "amber"} />
+              <KV label="Mail from" value={mailFrom ?? "—"} mono />
+              <KV
+                label="Tenant ID"
+                value={process.env.AZURE_TENANT_ID ? `${process.env.AZURE_TENANT_ID.slice(0, 8)}…` : "—"}
+                mono
+              />
+              <KV
+                label="Client ID"
+                value={process.env.AZURE_CLIENT_ID ? `${process.env.AZURE_CLIENT_ID.slice(0, 8)}…` : "—"}
+                mono
+              />
+            </div>
+            <SendTestEmailButton configured={azureReady} mailFrom={mailFrom} />
+          </div>
+        </Section>
+
+        <Section
           icon={<ShieldCheck className="w-4 h-4" />}
           title="Enforce no-deletion guardrail globally"
           desc="Cannot be disabled by tenant operators. All DELETE requests to Encompass return HTTP 405."
@@ -48,13 +75,7 @@ export default function PlatformSettingsPage() {
           title="Workflow rollback window"
           desc="How many versions to keep per workflow for rollback."
         >
-          <input
-            type="number"
-            min={1}
-            max={50}
-            defaultValue={10}
-            className="input h-9 w-24"
-          />
+          <input type="number" min={1} max={50} defaultValue={10} className="input h-9 w-24" />
         </Section>
 
         <Section
@@ -101,6 +122,32 @@ function Section({
         </div>
       </div>
       {children}
+    </div>
+  );
+}
+
+function KV({
+  label,
+  value,
+  mono,
+  tone,
+}: {
+  label: string;
+  value: string;
+  mono?: boolean;
+  tone?: "green" | "amber" | "red";
+}) {
+  const TONE: Record<string, string> = {
+    green: "text-emerald-700",
+    amber: "text-amber-700",
+    red: "text-red-700",
+  };
+  return (
+    <div className="rounded-lg border border-ink-200 bg-white px-3 py-2">
+      <div className="text-[10px] uppercase tracking-wide text-ink-500">{label}</div>
+      <div className={`${mono ? "font-mono" : ""} ${tone ? TONE[tone] : "text-ink-800"}`}>
+        {value}
+      </div>
     </div>
   );
 }
