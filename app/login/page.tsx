@@ -48,15 +48,25 @@ function LoginForm() {
   }
 
   return (
-    <main className="min-h-screen bg-ink-50 grid place-items-center p-6">
+    <main
+      className="min-h-screen grid place-items-center p-6"
+      style={{ background: "var(--bg-primary)" }}
+    >
       <div className="w-full max-w-md">
         <div className="flex items-center gap-2 mb-6 justify-center">
-          <div className="w-9 h-9 rounded-xl bg-ink-900 text-white grid place-items-center">
-            <Sparkles className="w-5 h-5" />
+          <div
+            className="w-7 h-7 rounded grid place-items-center text-[11px]"
+            style={{ background: "var(--interactive-primary)", color: "#fff" }}
+          >
+            OB
           </div>
           <div className="leading-tight">
-            <div className="text-base font-semibold text-ink-900">OpenBroker</div>
-            <div className="text-[11px] text-ink-500">AI workflow portal</div>
+            <div className="text-[15px]" style={{ color: "var(--text-primary)" }}>
+              OpenBroker
+            </div>
+            <div className="mono-caps" style={{ fontSize: 9 }}>
+              AI workflow portal
+            </div>
           </div>
         </div>
 

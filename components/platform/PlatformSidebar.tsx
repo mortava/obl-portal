@@ -13,7 +13,6 @@ import {
   ScrollText,
   BellRing,
   Settings,
-  Sparkles,
   ArrowLeft,
 } from "lucide-react";
 import { cls } from "@/lib/utils";
@@ -34,17 +33,33 @@ const NAV = [
 export function PlatformSidebar() {
   const pathname = usePathname();
   return (
-    <aside className="hidden md:flex md:flex-col w-60 shrink-0 border-r border-ink-200 bg-ink-900 text-ink-100">
-      <div className="h-14 px-5 flex items-center gap-2 border-b border-ink-800">
-        <div className="w-7 h-7 rounded-lg bg-white text-ink-900 grid place-items-center">
-          <Sparkles className="w-4 h-4" />
+    <aside
+      className="hidden md:flex md:flex-col w-60 shrink-0"
+      style={{
+        background: "var(--bg-secondary)",
+        borderRight: "1px solid var(--border-subtle)",
+      }}
+    >
+      <div
+        className="h-14 px-5 flex items-center gap-2"
+        style={{ borderBottom: "1px solid var(--border-subtle)" }}
+      >
+        <div
+          className="w-6 h-6 rounded grid place-items-center text-[10px] font-medium"
+          style={{ background: "var(--interactive-primary)", color: "#fff" }}
+        >
+          OB
         </div>
         <div className="leading-tight">
-          <div className="text-sm font-semibold text-white">OpenBroker</div>
-          <div className="text-[11px] text-ink-400">Platform console</div>
+          <div className="text-[13px]" style={{ color: "var(--text-primary)" }}>
+            OpenBroker
+          </div>
+          <div className="mono-caps" style={{ fontSize: 9 }}>
+            Platform console
+          </div>
         </div>
       </div>
-      <nav className="p-3 space-y-1">
+      <nav className="p-2 space-y-0.5">
         {NAV.map(({ href, label, icon: Icon, exact }) => {
           const active = exact ? pathname === href : pathname.startsWith(href);
           return (
@@ -52,28 +67,38 @@ export function PlatformSidebar() {
               key={href}
               href={href}
               className={cls(
-                "flex items-center gap-3 rounded-lg px-3 py-2 text-sm transition-colors",
-                active
-                  ? "bg-white text-ink-900"
-                  : "text-ink-200 hover:bg-ink-800 hover:text-white"
+                "flex items-center gap-3 rounded-md px-3 py-1.5 text-[13px] transition-colors"
               )}
+              style={{
+                background: active ? "var(--interactive-secondary)" : "transparent",
+                color: active ? "var(--text-primary)" : "var(--text-secondary)",
+              }}
             >
-              <Icon className="w-4 h-4" />
+              <Icon className="w-3.5 h-3.5" />
               {label}
             </Link>
           );
         })}
       </nav>
       <div className="mt-auto p-3 space-y-2">
-        <div className="rounded-xl border border-ink-700 bg-ink-800 p-3 text-xs text-ink-200">
-          <div className="font-medium text-white mb-1">Operator mode</div>
-          You are viewing platform-wide data. Switch to the user panel to act as a single tenant.
+        <div
+          className="rounded-lg p-3 text-xs"
+          style={{
+            background: "var(--interactive-secondary)",
+            color: "var(--text-secondary)",
+          }}
+        >
+          <div className="mono-caps mb-1" style={{ fontSize: 9 }}>
+            Operator mode
+          </div>
+          Viewing platform-wide data across all tenants.
         </div>
         <Link
           href="/"
-          className="flex items-center gap-2 rounded-lg px-3 py-2 text-sm text-ink-100 hover:bg-ink-800"
+          className="flex items-center gap-2 rounded-md px-3 py-1.5 text-[13px] transition-colors hover:bg-[var(--interactive-secondary)]"
+          style={{ color: "var(--text-secondary)" }}
         >
-          <ArrowLeft className="w-4 h-4" />
+          <ArrowLeft className="w-3.5 h-3.5" />
           Back to user panel
         </Link>
       </div>

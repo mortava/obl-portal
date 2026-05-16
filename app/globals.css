@@ -2,41 +2,264 @@
 @tailwind components;
 @tailwind utilities;
 
-@layer base {
-  html, body {
-    @apply bg-ink-50 text-ink-900 antialiased;
-    font-feature-settings: "cv02", "cv03", "cv04", "cv11";
-  }
-  * { @apply border-ink-200; }
+/* ── Design tokens ──────────────────────────────────────────────────────── */
+/* Lightfield-inspired neutral palette. Use the semantic vars below in custom
+   styles; Tailwind utilities (ink-*, brand-*) map onto the same scale. */
+
+:root {
+  /* Neutral scale */
+  --color-neutral-z0:  #f9f9f8;
+  --color-neutral-z1:  #f5f5f3;
+  --color-neutral-z10: #2d2d2c;
+  --color-neutral-z12: #090909;
+
+  /* Transparency overlays */
+  --color-neutral-t1:  rgba(0, 0, 0, 0.04);
+  --color-neutral-t2:  rgba(0, 0, 0, 0.06);
+  --color-neutral-t3:  rgba(0, 0, 0, 0.08);
+  --color-neutral-t4:  rgba(0, 0, 0, 0.12);
+  --color-neutral-t5:  rgba(0, 0, 0, 0.16);
+  --color-neutral-t6:  rgba(0, 0, 0, 0.25);
+  --color-neutral-t8:  rgba(0, 0, 0, 0.50);
+  --color-neutral-t9:  rgba(0, 0, 0, 0.60);
+  --color-neutral-t10: rgba(0, 0, 0, 0.75);
+  --color-neutral-t11: rgba(0, 0, 0, 0.85);
+
+  /* Semantic */
+  --bg-primary:   var(--color-neutral-z0);
+  --bg-secondary: var(--color-neutral-z1);
+  --bg-tertiary:  #ffffff;
+
+  --text-primary:   var(--color-neutral-t11);
+  --text-secondary: var(--color-neutral-t9);
+  --text-tertiary:  var(--color-neutral-t8);
+  --text-muted:     var(--color-neutral-t6);
+
+  --border-moderate: var(--color-neutral-t4);
+  --border-subtle:   var(--color-neutral-t2);
+
+  --interactive-primary:         rgb(20, 20, 19);
+  --interactive-primary-hover:   rgba(0, 0, 0, 0.02);
+  --interactive-secondary:       rgba(0, 0, 0, 0.04);
+  --interactive-secondary-hover: rgba(0, 0, 0, 0.06);
+  --interactive-tertiary:        rgba(0, 0, 0, 0.04);
+
+  --accent-blue: #6fa8d6;
 }
+
+[data-theme="dark"] {
+  --bg-primary:   var(--color-neutral-z12);
+  --bg-secondary: #141414;
+  --bg-tertiary:  #1a1a1a;
+
+  --text-primary:   rgba(255, 255, 255, 0.85);
+  --text-secondary: rgba(255, 255, 255, 0.60);
+  --text-tertiary:  rgba(255, 255, 255, 0.50);
+  --text-muted:     rgba(255, 255, 255, 0.25);
+
+  --border-moderate: rgba(255, 255, 255, 0.12);
+  --border-subtle:   rgba(255, 255, 255, 0.06);
+
+  --interactive-primary:       #ffffff;
+  --interactive-primary-hover: rgba(255, 255, 255, 0.04);
+  --interactive-secondary:     rgba(255, 255, 255, 0.06);
+  --interactive-tertiary:      rgba(255, 255, 255, 0.04);
+}
+
+/* ── Base ───────────────────────────────────────────────────────────────── */
+
+@layer base {
+  html,
+  body {
+    background-color: var(--bg-primary);
+    color: var(--text-primary);
+    font-family: "Untitled Sans", Inter, ui-sans-serif, system-ui, -apple-system,
+      BlinkMacSystemFont, sans-serif;
+    font-feature-settings: "cv02", "cv03", "cv04", "cv11";
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  /* Headings inherit weight 400 — hierarchy comes from size + tracking */
+  h1, h2, h3, h4, h5, h6 {
+    font-weight: 400;
+    letter-spacing: -0.02em;
+  }
+  h1 { font-size: 28px; line-height: 1.20; letter-spacing: -0.030em; }
+  h2 { font-size: 24px; line-height: 1.25; letter-spacing: -0.020em; }
+  h3 { font-size: 21px; line-height: 1.25; letter-spacing: -0.015em; }
+  h4 { font-size: 19px; line-height: 1.30; letter-spacing: -0.010em; }
+
+  * {
+    border-color: var(--border-subtle);
+  }
+
+  hr {
+    border: none;
+    border-top: 1px solid var(--border-subtle);
+  }
+
+  code, pre, kbd, samp {
+    font-family: "DM Mono", JetBrains Mono, ui-monospace, monospace;
+    font-weight: 300;
+  }
+}
+
+/* ── Components ─────────────────────────────────────────────────────────── */
 
 @layer components {
+  /* Buttons — restrained, no shadows, no scale transforms */
   .btn {
-    @apply inline-flex items-center justify-center gap-2 rounded-lg px-4 py-2 text-sm font-medium transition-colors disabled:opacity-50 disabled:cursor-not-allowed focus:outline-none focus:ring-2 focus:ring-offset-1 focus:ring-brand-500;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    height: 32px;
+    padding: 0 12px;
+    border-radius: 6px;
+    font-size: 13px;
+    font-weight: 400;
+    letter-spacing: 0;
+    border: 1px solid transparent;
+    transition: background-color 0.15s ease, color 0.15s ease, opacity 0.15s ease, border-color 0.15s ease;
+    cursor: pointer;
+    user-select: none;
+    white-space: nowrap;
   }
-  .btn-primary { @apply btn bg-ink-900 text-white hover:bg-ink-800; }
-  .btn-secondary { @apply btn bg-white text-ink-800 border border-ink-200 hover:bg-ink-50; }
-  .btn-ghost { @apply btn text-ink-700 hover:bg-ink-100; }
-  .btn-danger { @apply btn bg-red-600 text-white hover:bg-red-700; }
+  .btn:disabled { opacity: 0.5; cursor: not-allowed; }
+  .btn:focus-visible {
+    outline: none;
+    box-shadow: 0 0 0 2px rgba(0, 0, 0, 0.12);
+  }
 
+  .btn-primary {
+    @apply btn;
+    background: var(--interactive-primary);
+    color: #ffffff;
+  }
+  .btn-primary:hover { opacity: 0.85; }
+
+  .btn-secondary {
+    @apply btn;
+    background: transparent;
+    border-color: var(--border-moderate);
+    color: var(--text-primary);
+  }
+  .btn-secondary:hover { background: var(--interactive-secondary); }
+
+  .btn-ghost {
+    @apply btn;
+    background: var(--interactive-tertiary);
+    color: var(--text-secondary);
+  }
+  .btn-ghost:hover {
+    background: var(--interactive-secondary-hover);
+    color: var(--text-primary);
+  }
+
+  .btn-danger {
+    @apply btn;
+    background: transparent;
+    border-color: var(--border-moderate);
+    color: rgb(180, 30, 30);
+  }
+  .btn-danger:hover { background: rgba(180, 30, 30, 0.06); }
+
+  /* Inputs — white surface, moderate border, focus deepens border */
   .input {
-    @apply block w-full rounded-lg border border-ink-200 bg-white px-3 py-2 text-sm placeholder:text-ink-400 focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-brand-500;
+    display: block;
+    width: 100%;
+    height: 36px;
+    padding: 8px 12px;
+    background: var(--bg-tertiary);
+    border: 1px solid var(--border-moderate);
+    border-radius: 6px;
+    font-size: 13px;
+    color: var(--text-primary);
+    outline: none;
+    transition: border-color 0.15s ease;
   }
-  .label { @apply block text-xs font-medium text-ink-600 mb-1.5; }
+  .input::placeholder { color: var(--text-muted); }
+  .input:focus { border-color: rgba(0, 0, 0, 0.30); }
 
-  .card { @apply bg-white border border-ink-200 rounded-xl shadow-card; }
-  .chip { @apply inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-[11px] font-medium; }
-  .chip-green { @apply chip bg-emerald-50 text-emerald-700; }
-  .chip-amber { @apply chip bg-amber-50 text-amber-700; }
-  .chip-red   { @apply chip bg-red-50 text-red-700; }
-  .chip-gray  { @apply chip bg-ink-100 text-ink-700; }
-  .chip-brand { @apply chip bg-brand-50 text-brand-700; }
-  .chip-ai    { @apply chip bg-ai-50 text-ai-700; }
+  .label {
+    display: block;
+    font-size: 10px;
+    font-weight: 500;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: var(--text-secondary);
+    margin-bottom: 6px;
+  }
+
+  /* Cards — flat, bordered, no shadow */
+  .card {
+    background: var(--bg-secondary);
+    border: 1px solid var(--border-subtle);
+    border-radius: 12px;
+  }
+  .card-tertiary {
+    background: var(--bg-tertiary);
+    border: 1px solid var(--border-subtle);
+    border-radius: 12px;
+  }
+
+  /* Chips / tags — mono-caps style */
+  .chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    height: 18px;
+    padding: 0 8px;
+    border-radius: 4px;
+    font-family: "DM Mono", ui-monospace, monospace;
+    font-size: 10px;
+    font-weight: 500;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    background: var(--interactive-secondary);
+    color: var(--text-secondary);
+    white-space: nowrap;
+  }
+  .chip-green {
+    background: rgba(0, 0, 0, 0.04);
+    color: rgb(40, 100, 60);
+  }
+  .chip-amber {
+    background: rgba(0, 0, 0, 0.04);
+    color: rgb(140, 90, 20);
+  }
+  .chip-red {
+    background: rgba(0, 0, 0, 0.04);
+    color: rgb(150, 40, 40);
+  }
+  .chip-gray {
+    background: var(--interactive-secondary);
+    color: var(--text-secondary);
+  }
+  .chip-brand {
+    background: rgba(111, 168, 214, 0.10);
+    color: var(--accent-blue);
+  }
+  .chip-ai {
+    background: var(--interactive-secondary);
+    color: var(--text-primary);
+  }
+
+  /* Mono-caps utility — for tiny section labels */
+  .mono-caps {
+    font-family: "DM Mono", ui-monospace, monospace;
+    font-size: 10px;
+    font-weight: 500;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: var(--text-secondary);
+  }
 }
 
-/* Subtle dotted grid background for the flow canvas */
+/* ── Flow canvas — subtle dotted grid ───────────────────────────────────── */
 .flow-grid {
-  background-color: #fafbfd;
-  background-image: radial-gradient(rgb(203 213 225 / 0.7) 1px, transparent 1px);
+  background-color: var(--bg-primary);
+  background-image: radial-gradient(rgba(0, 0, 0, 0.08) 1px, transparent 1px);
   background-size: 16px 16px;
 }
